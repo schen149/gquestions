@@ -1,8 +1,7 @@
-# ❓❔👾 Gquestions CLI Usage ❔❓
+# GQuestions CLI
+Given a query, GQuestions automatically and iteratively scrape the list of queries in "people also ask".
 
- ![pybadge] (https://img.shields.io/badge/python-%3E%3D3.7-important.svg)  ![badge](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)
-
-
+![badge](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)
 
 [![asciicast](https://asciinema.org/a/4wrOzHnxQVcTImuofzdMxB35L.svg)](https://asciinema.org/a/4wrOzHnxQVcTImuofzdMxB35L)
 
@@ -11,11 +10,22 @@
 > robots.txt. Scraping without Google explicit written permission is a violation of thei
 > terms and conditions on scraping and can potentially cause a lawsuit
 
-## Install dependencies
+## Installation
+Currently the code requires a chrome browser on your machine. 
+If you are familiar with the `selenium` library, you can change `gquestions.py` code to work with different browsers. The rest of the instructions assume that you are working with Chrome.  
+#### Step 1: Download `ChromeDriver` and place it under `driver/`
+Check your chrome browser, and download the matching version of driver from https://chromedriver.chromium.org/.
+
+#### Step 2: Start with a fresh python 3.7 environment and install the required packages
 ```
 pip -r requirements.txt
 ```
 
+#### Step 3: Verify the installation with an example query
+Search "flights" in English and export in html (under `html/`)
+```
+python gquestions.py query "flights" en
+```
 ## 🔍 Usage:
 
 ```
@@ -29,11 +39,6 @@ gquestions.py (-h | --help)
 ```
 
 ## 💡 Examples:
-Search "flights" in English and export in html
-
-```
-python gquestions.py query "flights" en
-```
 
 Search headlessly "flights" in English and export in html
 ```
