@@ -14,7 +14,7 @@ Given a query, GQuestions automatically and iteratively scrape the list of queri
 Currently the code requires a chrome browser on your machine. 
 If you are familiar with the `selenium` library, you can change `gquestions.py` code to work with different browsers. The rest of the instructions assume that you are working with Chrome.  
 #### Step 1: Download `ChromeDriver` and place it under `driver/`
-Check your chrome browser, and download the matching version of driver from https://chromedriver.chromium.org/.
+Check the version of your chrome browser (in `setting` -> `About Chrome`), and download the matching version of driver from https://chromedriver.chromium.org/.
 
 #### Step 2: Start with a fresh python 3.7 environment and install the required packages
 ```
