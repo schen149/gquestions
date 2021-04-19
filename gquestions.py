@@ -1,22 +1,3 @@
-usage='''
-❓❔👾 Gquestions CLI Usage ❔❓
-
-🔍 Usage:
-    gquestions.py query <keyword> (en|es) [depth <depth>] [--csv] [--headless]
-    gquestions.py (-h | --help)
-
-💡 Examples:
-    ▶️  gquestions.py query "flights" en              Search "flights" in English and export in html
-    ▶️  gquestions.py query "flights" en --headless   Search headlessly "flights" in English and export in html
-    ▶️  gquestions.py query "vuelos" es --csv         Search "vuelos" in Spanish and export in html and csv
-    ▶️  gquestions.py query "vuelos" es depth 1       Search "vuelos" in Spanish with a depth of 1 and export in html
-    ▶️  gquestions.py -h                              Print this message
-   
-👀 Options:
-    -h, --help
-
-'''
-
 import os
 import re
 import sys
@@ -37,6 +18,22 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
+
+usage = '''
+Gquestions CLI Usage
+Usage:
+    gquestions.py query <keyword> (en|es) [depth <depth>] [--csv] [--headless]
+    gquestions.py (-h | --help)
+Examples:
+    ▶️  gquestions.py query "flights" en              Search "flights" in English and export in html
+    ▶️  gquestions.py query "flights" en --headless   Search headlessly "flights" in English and export in html
+    ▶️  gquestions.py query "vuelos" es --csv         Search "vuelos" in Spanish and export in html and csv
+    ▶️  gquestions.py query "vuelos" es depth 1       Search "vuelos" in Spanish with a depth of 1 and export in html
+    ▶️  gquestions.py -h                              Print this message
+
+Options:
+    -h, --help
+'''
 
 ''' 
 Visualizza una barra di caricamento per mostrare l'attesa
@@ -122,7 +119,7 @@ Click on questions N times
 def clickNTimes(el, n=1):
     for i in range(n):
         el.click()
-        logging.info(f"clicking on ... {el.text}")
+        logging.info("clicking on ... {}".format(el.text))
         sleepBar(1)
         scrollToFeedback()
         try:
@@ -134,6 +131,7 @@ def clickNTimes(el, n=1):
 """
 Hide Google Bar to prevent ClickInterceptionError
 """
+
 def hideGBar():
 	try:
 		browser.execute_script('document.getElementById("searchform").style.display = "none";')
@@ -160,14 +158,14 @@ def crawlQuestions(start_paa, paa_list, initialSet, depth=0):
         new_q = showNewQuestions(initialSet)
         for l, value in new_q.items():
             sleepBar(1)
-            logging.info(f"{l}, {value.text}")
+            logging.info("{}, {}".format(l, value.text))
             test1 = createNode(paa_lst=test[0]["children"][outer_cnt]["children"], 
                                 name=value.text,
                                 parent=test[0]["children"][outer_cnt]["name"],
                                 children=True)
             
         initialSet = getCurrentSERP()
-        logging.info(f"Current count: {outer_cnt}")
+        logging.info("Current count: {}".format(outer_cnt))
         outer_cnt += 1
         if depth==1:
             for i in range(depth):
@@ -246,7 +244,7 @@ Args:
 Returns:
     list of questions with the current new node
 """
-def createNode( n=-1, parent='null', children=False, name='',*, paa_lst):
+def createNode( n=-1, parent='null', children=False, name='', paa_lst=[]):
     logging.info(paa_lst)
     if children:
         _d = {
@@ -291,7 +289,7 @@ def flatten_csv(data,depth,prettyname):
             merge = merge.drop_duplicates(subset='inner.inner.name', keep='first')
             merge.to_csv(prettyname,sep=';',encoding='utf-8')
     except Exception as e:
-        logging.warning(f"{e}")
+        logging.warning("{}".format(e))
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
