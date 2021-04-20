@@ -40,8 +40,15 @@ To print help message --
 ```
 python gquestions.py (-h | --help)
 ```
+## How to read the csv results
+The output csv file has four columns:
+- id: 
+- parent: The query you put in the search bar
+- name: The first-level "people also ask" entries that appears for the query.
+- inner.name: Additional "people also ask" items that popped up after clicking on the first-level entries. 
 
-## 💡 Examples:
+
+## Advanved Usage Examples:
 
 Search headlessly "flights" in English and export in html
 ```
