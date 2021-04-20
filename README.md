@@ -22,20 +22,23 @@ pip -r requirements.txt
 ```
 
 #### Step 3: Verify the installation with an example query
-Search "flights" in English and export in html (under `html/`)
+Search "flights" in English and export in csv (under `csv/`)
 ```
-python gquestions.py query "flights" en
+python gquestions.py query "flights" en --csv
 ```
 ## 🔍 Usage:
-
+To make a single query: 
 ```
 python gquestions.py query <keyword> (en|es) [depth <depth>] [--csv] [--headless]
 ```
-
-Print help message.
-
+To process a batch of queries -- Put the queries in a line separated file (see `perspectrum_claims.txt` for example), and run:
 ```
-gquestions.py (-h | --help)
+bash extract.sh <input-file>
+```
+
+To print help message --
+```
+python gquestions.py (-h | --help)
 ```
 
 ## 💡 Examples:

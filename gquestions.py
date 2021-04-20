@@ -5,6 +5,7 @@ import json
 import time
 import datetime
 import platform
+import traceback
 from docopt import docopt
 from tqdm import tqdm 
 from time import sleep
@@ -19,9 +20,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 
-usage = '''
-Gquestions CLI Usage
-Usage:
+usage = '''Usage:
     gquestions.py query <keyword> (en|es) [depth <depth>] [--csv] [--headless]
     gquestions.py (-h | --help)
 Examples:
@@ -87,7 +86,8 @@ def newSearch(browser,query):
     except:
         searchbtn[0].click()
     sleepBar(2)
-    paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@class,'match-mod-horizontal-padding')]")
+    paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@style,'padding-right:24px')]")
+    # paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@class,'match-mod-horizontal-padding')]")
     hideGBar()
     return paa
 """
@@ -206,7 +206,8 @@ Returns:
 """
 def getCurrentSERP():
     _tmpset = {}
-    new_paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@class,'match-mod-horizontal-padding')]")
+    # new_paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@class,'match-mod-horizontal-padding')]")
+    new_paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@style,'padding-right:24px')]")
     cnt= 0
     for q in new_paa:
         _tmpset.update({cnt:q})
@@ -270,7 +271,7 @@ def createNode( n=-1, parent='null', children=False, name='', paa_lst=[]):
 This func takes in input JSON data and returns csv file.
 """
 def flatten_csv(data,depth,prettyname):
-    try:
+    # try:
         if depth == 0:
             _ = json_normalize(data[0]["children"], 'children', ['name', 'parent',['children',]], record_prefix='inner.')
             _.drop(columns=['children','inner.children','inner.parent'], inplace=True)
@@ -288,8 +289,10 @@ def flatten_csv(data,depth,prettyname):
             merge = merge.reindex(columns=columnTitle)
             merge = merge.drop_duplicates(subset='inner.inner.name', keep='first')
             merge.to_csv(prettyname,sep=';',encoding='utf-8')
-    except Exception as e:
-        logging.warning("{}".format(e))
+    # except Exception as e:
+    #     logging.warning("{}".format(e))
+    #     traceback.print_stack()
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
@@ -319,6 +322,7 @@ if __name__ == "__main__":
         query = args['<keyword>']
         start_paa = newSearch(browser,query)
 
+        print(start_paa)
         initialSet = {}
         cnt= 0
         for q in start_paa:
@@ -341,9 +345,11 @@ if __name__ == "__main__":
                     treeData = treeData,
                 ))
 
+        print(paa_list)
     if args['--csv']:
         if paa_list[0]['children']:
             _path = 'csv/'+prettyOutputName('csv')
+            logging.info("Saving results to {}".format(_path))
             flatten_csv(paa_list, depth, _path)
 
     browser.close()
