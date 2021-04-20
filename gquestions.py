@@ -86,8 +86,8 @@ def newSearch(browser,query):
     except:
         searchbtn[0].click()
     sleepBar(2)
-    paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@style,'padding-right:24px')]")
-    # paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@class,'match-mod-horizontal-padding')]")
+    # paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@style,'padding-right:24px')]")
+    paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@class,'cbphWd')]")
     hideGBar()
     return paa
 """
@@ -206,8 +206,8 @@ Returns:
 """
 def getCurrentSERP():
     _tmpset = {}
-    # new_paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@class,'match-mod-horizontal-padding')]")
-    new_paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@style,'padding-right:24px')]")
+    new_paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@class,'cbphWd')]")
+    # new_paa = browser.find_elements_by_xpath("//span/following-sibling::div[contains(@style,'padding-right:24px')]")
     cnt= 0
     for q in new_paa:
         _tmpset.update({cnt:q})
@@ -271,7 +271,7 @@ def createNode( n=-1, parent='null', children=False, name='', paa_lst=[]):
 This func takes in input JSON data and returns csv file.
 """
 def flatten_csv(data,depth,prettyname):
-    # try:
+    try:
         if depth == 0:
             _ = json_normalize(data[0]["children"], 'children', ['name', 'parent',['children',]], record_prefix='inner.')
             _.drop(columns=['children','inner.children','inner.parent'], inplace=True)
@@ -289,9 +289,8 @@ def flatten_csv(data,depth,prettyname):
             merge = merge.reindex(columns=columnTitle)
             merge = merge.drop_duplicates(subset='inner.inner.name', keep='first')
             merge.to_csv(prettyname,sep=';',encoding='utf-8')
-    # except Exception as e:
-    #     logging.warning("{}".format(e))
-    #     traceback.print_stack()
+    except Exception as e:
+        logging.warning("{}".format(e))
 
 
 if __name__ == "__main__":
@@ -331,6 +330,7 @@ if __name__ == "__main__":
         paa_list = []
 
         crawlQuestions(start_paa, paa_list, initialSet,depth)
+
         treeData = 'var treeData = ' + json.dumps(paa_list) + ';'
         
         if paa_list[0]['children']:
