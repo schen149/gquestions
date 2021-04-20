@@ -322,7 +322,6 @@ if __name__ == "__main__":
         query = args['<keyword>']
         start_paa = newSearch(browser,query)
 
-        print(start_paa)
         initialSet = {}
         cnt= 0
         for q in start_paa:
@@ -345,7 +344,6 @@ if __name__ == "__main__":
                     treeData = treeData,
                 ))
 
-        print(paa_list)
     if args['--csv']:
         if paa_list[0]['children']:
             _path = 'csv/'+prettyOutputName('csv')
